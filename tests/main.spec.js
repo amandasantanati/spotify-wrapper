@@ -9,6 +9,17 @@ chai.use(sinonChai);
 global.fetch = require('node-fetch');
 
 describe('Spotify Wrapper', () => {
+  let fetchedStub;
+
+  beforeEach(() => {
+    fetchedStub = sinon.stub(global, 'fetch');
+    fetchedStub.resolves({json: () => ({})})
+  });
+
+  afterEach(() => {
+    fetchedStub.restore();
+  });
+
   describe('Smoke tests', () => {
     it('should exist the search method', () => {
       expect(search).to.exist;
@@ -32,17 +43,6 @@ describe('Spotify Wrapper', () => {
   });
 
   describe('Generic search', () => {
-    let fetchedStub;
-
-    beforeEach(() => {
-      fetchedStub = sinon.stub(global, 'fetch');
-      fetchedStub.resolves({json: () => ({})})
-    });
-
-    afterEach(() => {
-      fetchedStub.restore();
-    });
-
     it('should call fetch function', () => {
       search();
 
@@ -70,6 +70,58 @@ describe('Spotify Wrapper', () => {
       artists.then((data) => {
         expect(data).to.be.eql({});
       });
+    });
+  });
+
+  describe('Albums search', () => {
+    it('should call fetch function', () => {
+      searchAlbums('Home');
+
+      expect(fetchedStub).to.have.been.calledOnce;
+    });
+
+    it('should fetch by album', () => {
+      searchAlbums('Home');
+      expect(fetchedStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Home&type=album');
+    });
+  });
+
+  describe('Artists search', () => {
+    it('should call fetch function', () => {
+      searchArtists('Roxette');
+
+      expect(fetchedStub).to.have.been.calledOnce;
+    });
+
+    it('should fetch by artist', () => {
+      searchArtists('Roxette');
+      expect(fetchedStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Roxette&type=artist');
+    });
+  });
+
+  describe('Tracks search', () => {
+    it('should call fetch function', () => {
+      searchTracks('Joyride');
+
+      expect(fetchedStub).to.have.been.calledOnce;
+    });
+
+    it('should fetch by track', () => {
+      searchTracks('Joyride');
+      expect(fetchedStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Joyride&type=track');
+    });
+  });
+
+  describe('Playlists search', () => {
+    it('should call fetch function', () => {
+      searchPlaylists('Quarentena');
+
+      expect(fetchedStub).to.have.been.calledOnce;
+    });
+
+    it('should fetch by playlist', () => {
+      searchPlaylists('Quarentena');
+      expect(fetchedStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Quarentena&type=playlist');
     });
   });
 });
