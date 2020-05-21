@@ -66,4 +66,23 @@ describe('Album methods', () => {
       })
     });
   });
+
+  describe('getAlbumTracks method', () => {
+    it('should call fetch method', () => {
+      getAlbumTracks();
+      expect(stubbedFetch).to.have.been.calledOnce;
+    });
+
+    it('should called fetch with correct URL', () => {
+      getAlbumTracks('41MnTivkwTO3UUJ8DrqEJJ');
+      expect(stubbedFetch).to.have.been.calledWith('https://api.spotify.com/v1/albums/41MnTivkwTO3UUJ8DrqEJJ/tracks');
+    });
+
+    it('should return correct data from promise', () => {
+      const tracks = getAlbumTracks('41MnTivkwTO3UUJ8DrqEJX');
+      tracks.then((data) => {
+        expect(data).to.be.eql({ album: 'name' });
+      })
+    });
+  });
 });
