@@ -47,4 +47,23 @@ describe('Album methods', () => {
       });
     });
   });
+
+  describe('getAlbums method', () => {
+    it('should call fetch method', () => {
+      getAlbums();
+      expect(stubbedFetch).to.have.been.calledOnce;
+    });
+
+    it('should called fetch with correct URL', () => {
+      getAlbums(['41MnTivkwTO3UUJ8DrqEJJ', '41MnTivkwTO3UUJ8DrqEJX']);
+      expect(stubbedFetch).to.have.been.calledWith('https://api.spotify.com/v1/albums/?ids=41MnTivkwTO3UUJ8DrqEJJ,41MnTivkwTO3UUJ8DrqEJX');
+    });
+
+    it('should return correct data from promise', () => {
+      const albums = getAlbums(['41MnTivkwTO3UUJ8DrqEJJ', '41MnTivkwTO3UUJ8DrqEJX']);
+      albums.then((data) => {
+        expect(data).to.be.eql({ album: 'name' });
+      })
+    });
+  });
 });
