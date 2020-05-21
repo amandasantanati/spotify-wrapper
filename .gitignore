@@ -115,4 +115,6 @@ dist
 .yarn/build-state.yml
 .pnp.*
 
-**/build.js
+# Compiled Lib
+lib
+dist
