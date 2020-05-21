@@ -2,8 +2,11 @@
   "name": "spotify-wrapper",
   "version": "1.0.0",
   "description": "A wrapper to work with Spotify Web API",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
+    "clear": "rimraf lib",
+    "build": "npm run clear && ./node_modules/.bin/babel --out-dir lib src",
+    "build:watch": "npm run build -- --watch",
     "lint": "./node_modules/.bin/eslint src/*.js",
     "test": "./node_modules/.bin/mocha tests/**/*.spec.js --require @babel/register",
     "test:tdd": "npm run test -- --watch",
@@ -34,6 +37,7 @@
   "author": "Amanda Santana <amandasantanati@gmail.com> (http://amandasantanati.com.br/)",
   "license": "MIT",
   "devDependencies": {
+    "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.6",
     "@babel/preset-env": "^7.9.6",
     "@babel/register": "^7.9.0",
@@ -45,7 +49,9 @@
     "mocha": "^7.1.2",
     "node-fetch": "^2.6.0",
     "nyc": "^15.0.1",
+    "rimraf": "^3.0.2",
     "sinon": "^9.0.2",
     "sinon-chai": "^3.5.0"
-  }
+  },
+  "dependencies": {}
 }
