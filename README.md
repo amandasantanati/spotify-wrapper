@@ -1,10 +1,10 @@
 # Spotify Wrapper
 
 [![Build Status](https://travis-ci.org/amandasantanati/spotify-wrapper.svg?branch=master)](https://travis-ci.org/amandasantanati/spotify-wrapper)
-
 [![Coverage Status](https://coveralls.io/repos/github/amandasantanati/spotify-wrapper/badge.svg?branch=master)](https://coveralls.io/github/amandasantanati/spotify-wrapper?branch=master)
 
 A wrapper to work with [Spotify Web API](https://developer.spotify.com/web-api/).
+
 This wrapper was built during the [Willian Justen's JS with TDD course at Udemy](https://www.udemy.com/course/js-com-tdd-na-pratica).
 
 ## Browser Support
