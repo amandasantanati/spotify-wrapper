@@ -2,7 +2,7 @@
   "name": "spotify-wrapper",
   "version": "1.0.0",
   "description": "A wrapper to work with Spotify Web API",
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "scripts": {
     "clear": "rimraf lib",
     "build": "npm run clear && ./node_modules/.bin/babel --out-dir lib src",
@@ -21,6 +21,10 @@
       "pre-push": "npm run lint"
     }
   },
+  "files": [
+    "dist",
+    "lib"
+  ],
   "nyc": {
     "functions": 80,
     "lines": 80,
