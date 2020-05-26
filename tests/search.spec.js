@@ -2,126 +2,94 @@ import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
-import { search, searchAlbums, searchArtists, searchTracks, searchPlaylists } from '../src/search';
+import SpotifyWrapper from '../src/index';
 
 chai.use(sinonChai);
 
 global.fetch = require('node-fetch');
 
 describe('Search methods', () => {
-  let fetchedStub;
+  let stubbedFetch;
+  let spotify;
 
   beforeEach(() => {
-    fetchedStub = sinon.stub(global, 'fetch');
-    fetchedStub.resolves({json: () => ({})})
+    stubbedFetch = sinon.stub(global, 'fetch');
+    stubbedFetch.resolves({json: () => ({})});
+
+    spotify = new SpotifyWrapper({ token: 'foo' });
   });
 
   afterEach(() => {
-    fetchedStub.restore();
+    stubbedFetch.restore();
   });
 
   describe('Smoke tests', () => {
-    it('should exist the search method', () => {
-      expect(search).to.exist;
-    });
-
     it('should exist the searchAlbums method', () => {
-      expect(searchAlbums).to.exist;
+      expect(spotify.search.albums).to.exist;
     });
 
     it('should exist the searchArtists method', () => {
-      expect(searchArtists).to.exist;
+      expect(spotify.search.artists).to.exist;
     });
 
     it('should exist the searchTracks method', () => {
-      expect(searchTracks).to.exist;
+      expect(spotify.search.tracks).to.exist;
     });
 
     it('should exist the searchPlaylists method', () => {
-      expect(searchPlaylists).to.exist;
-    });
-  });
-
-  describe('Generic search', () => {
-    it('should call fetch function', () => {
-      search();
-
-      expect(fetchedStub).to.have.been.calledOnce;
-    });
-
-    it('should receive the correct url to fetch', () => {
-      context('passing one type', () => {
-        search('Incubus', 'artist');
-        expect(fetchedStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Incubus&type=artist');
-
-        search('Roxette', 'album');
-        expect(fetchedStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Roxette&type=album');
-      });
-
-      context('passing more than one type', () => {
-        search('Roxette', ['artist', 'album']);
-        expect(fetchedStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Roxette&type=artist,album');
-      });
-    });
-
-    it('should return JSON data from the promise', () => {
-      const artists = search('Roxette', 'artist');
-
-      artists.then((data) => {
-        expect(data).to.be.eql({});
-      });
+      expect(spotify.search.playlists).to.exist;
     });
   });
 
   describe('Albums search', () => {
     it('should call fetch function', () => {
-      searchAlbums('Home');
+      spotify.search.albums('Roxette');
 
-      expect(fetchedStub).to.have.been.calledOnce;
+      expect(stubbedFetch).to.have.been.calledOnce;
     });
 
     it('should fetch by album', () => {
-      searchAlbums('Home');
-      expect(fetchedStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Home&type=album');
+      spotify.search.albums('Roxette');
+      expect(stubbedFetch).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Roxette&type=album');
     });
   });
 
   describe('Artists search', () => {
     it('should call fetch function', () => {
-      searchArtists('Roxette');
+      spotify.search.artists('Roxette');
 
-      expect(fetchedStub).to.have.been.calledOnce;
+      expect(stubbedFetch).to.have.been.calledOnce;
     });
 
     it('should fetch by artist', () => {
-      searchArtists('Roxette');
-      expect(fetchedStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Roxette&type=artist');
+      spotify.search.artists('Roxette');
+      expect(stubbedFetch).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Roxette&type=artist');
     });
   });
 
   describe('Tracks search', () => {
     it('should call fetch function', () => {
-      searchTracks('Joyride');
+      spotify.search.tracks('Roxette');
 
-      expect(fetchedStub).to.have.been.calledOnce;
+      expect(stubbedFetch).to.have.been.calledOnce;
     });
 
     it('should fetch by track', () => {
-      searchTracks('Joyride');
-      expect(fetchedStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Joyride&type=track');
+      spotify.search.tracks('Roxette');
+      expect(stubbedFetch).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Roxette&type=track');
     });
   });
 
   describe('Playlists search', () => {
     it('should call fetch function', () => {
-      searchPlaylists('Quarentena');
+      spotify.search.playlists('Roxette');
 
-      expect(fetchedStub).to.have.been.calledOnce;
+      expect(stubbedFetch).to.have.been.calledOnce;
     });
 
     it('should fetch by playlist', () => {
-      searchPlaylists('Quarentena');
-      expect(fetchedStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Quarentena&type=playlist');
+      spotify.search.playlists('Roxette');
+      expect(stubbedFetch).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Roxette&type=playlist');
     });
   });
 });
